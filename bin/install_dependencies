@@ -13,19 +13,7 @@ apt-get update
 apt-get install -y --force-yes build-essential flex bison upstart runit patch g++ libxml2-dev \
   libxslt-dev libpq-dev git-core libsqlite3-dev vim curl unzip libreadline5-dev
 
-# install ruby and dependencies
-# apt-get install m4 libtool autoconf automake -y
-
-# sm set install all
-# for package in openssl ncurses pkg-config readline zlib libyaml
-# do
-#   sm ${package} package install
-# done
-# sm ruby install
-if [[ ! -x rvm ]]
-then
-  curl -L https://get.rvm.io | bash -s stable
-fi
+curl -L https://get.rvm.io | bash -s stable
 /usr/local/rvm/bin/rvm install 1.9.3
 /usr/local/rvm/bin/rvm use 1.9.3 --default
 source $(/usr/local/rvm/bin/rvm 1.9.3 do rvm env --path)
