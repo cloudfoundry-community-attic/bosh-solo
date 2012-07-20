@@ -39,7 +39,7 @@ then
   /var/vcap/bosh/bin/monit -V
 else
   export build_dir=/bosh/agent/misc/stemcell/build2/
-  work_path="/"
+  typeset work_path="/"
   export chroot="/"
   ${build_dir}/stages/bosh_monit/apply.sh ${work_path} || exit 1
 fi

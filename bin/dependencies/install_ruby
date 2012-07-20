@@ -5,7 +5,8 @@ set -e # exit immediately if a simple command exits with a non-zero status
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
 sm set install all
-for package in openssl ncurses autoconf automake libtool pkg-config readline zlib libyaml
+sm autoconf install version 2.65
+for package in openssl ncurses automake libtool pkg-config readline zlib libyaml
 do
   sm ${package} package install
 done
