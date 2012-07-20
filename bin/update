@@ -24,7 +24,7 @@ fi
 sm bosh-solo stop || true
 for log in $(sm bosh-solo helpers/list_logs)
 do
-  rm $logs
+  rm ${log}
 done
 
 sm bosh-solo install
