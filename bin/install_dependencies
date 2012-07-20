@@ -45,6 +45,7 @@ then
 fi
 source ~/.bashrc
 
+gem install bundler rake --no-ri --no-rdoc
 sm bosh-solo dependencies/install_bosh /bosh
 
 if [[ -x /var/vcap/bosh/bin/monit ]]
