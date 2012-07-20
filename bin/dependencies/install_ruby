@@ -4,13 +4,11 @@ set -e # exit immediately if a simple command exits with a non-zero status
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-if [[ -x rvm ]]
-then
-  rvm get stable
-else
-  curl -L get.rvm.io | bash -s stable
-  source /etc/profile.d/rvm.sh
+if [[ ! -x ruby ]]
+  sm set install all
+  for package in openssl readline zlib libyaml
+  do
+    sm ${package} package install
+  done
+  sm ruby install
 fi
-command /usr/local/rvm/bin/rvm install 1.9.3 # oh god this takes a long time
-/usr/local/rvm/bin/rvm 1.9.3
-/usr/local/rvm/bin/rvm alias create default 1.9.3

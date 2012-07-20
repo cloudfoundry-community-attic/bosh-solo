@@ -44,10 +44,3 @@ else
   ${build_dir}/stages/bosh_monit/apply.sh ${work_path} || exit 1
 fi
 
-gem install bundler rake --no-ri --no-rdoc
-
-cd ${release_path}
-if [[ -f Gemfile ]]
-then
-  bundle --local
-fi

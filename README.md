@@ -11,8 +11,8 @@ curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
 source /etc/profile.d/sm.sh
 apt-get install git-core -y
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
-sm bosh-solo dependencies/install_ruby
 sm bosh-solo install_dependencies
+sm bosh-solo dependencies/install_ruby
 sm bosh-solo dependencies/install_bosh
 ```
 
