@@ -22,7 +22,7 @@ require "cli"
 # to: /vagrant/dev_releases/rackapp-boshrelease-0.6-dev.yml
 def local_manifest_path(hostmachine_manifest_path, work_dir)
   if hostmachine_manifest_path =~ %r{(/(?:dev_releases|releases)/.*)$}
-    File.join(work_dir, ARGV[1])
+    File.join(work_dir, $1)
   else
     hostmachine_manifest_path
   end
