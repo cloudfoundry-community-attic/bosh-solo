@@ -22,12 +22,13 @@ apt-get install -y --force-yes build-essential flex bison upstart runit patch g+
 #   sm ${package} package install
 # done
 # sm ruby install
-if [[ -x rvm ]]
+if [[ ! -x rvm ]]
 then
   curl -L https://get.rvm.io | bash -s stable
 fi
-/usr/local/rvm/bin/rvm install 1.9.3
-/usr/local/rvm/bin/rvm use 1.9.3 --default
+rvm install 1.9.3
+rvm use 1.9.3 --default
+source $(/usr/local/rvm/bin/rvm 1.9.3 do rvm env --path)
 
 if [[ ! -d /home/vcap ]]
 then
