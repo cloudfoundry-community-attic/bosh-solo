@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Render job templates
+# Use example manifest for properties for template rendering
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+[ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
+
+manifest_template=$1
+if [[ ! -f ${manifest_template} ]]; then
+  echo "USAGE: configure MANIFEST_TEMPLATE"
+  echo "  # MANIFEST_TEMPLATE - YAML file, contains 'properties' key."
+  exit 1
+fi
+
+
+base_dir=/var/vcap
+jobs_dir=${base_dir}/data/jobs
+
+cd $(dirname $0)/..
+release_path=$(pwd)
+scripts=${release_path}/scripts
+
+if [[ -d ${base_dir} ]]
+then
+  echo Configuring jobs...
+else
+  echo Run "${scripts}/install" first!
+  exit 1
+fi
+
+release_tgz=$(${scripts}/helpers/create_release_tgz ${release_path})
+${scripts}/helpers/apply_jobs ${release_tgz} ${manifest_template}

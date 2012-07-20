@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+bosh_install_path=${1:-/bosh}
+gerrit_user=${2:-skip}
+
+if [[ -d ${bosh_install_path} ]]
+then
+  echo "Updating existing project..."
+  cd ${bosh_install_path}
+  git pull origin master
+else
+  echo "Cloning..."
+  mkdir -p $(dirname ${bosh_install_path})
+  git clone git://github.com/cloudfoundry/bosh.git ${bosh_install_path}
+fi
+
+if [[ ${gerrit_user} = 'skip' ]]
+then
+  echo 'Skipping applying patches. Pass GERRIT_USER argument.'
+else
+  cd ${bosh_install_path} && git fetch ssh://${gerrit_user}@reviews.cloudfoundry.org:29418/bosh refs/changes/26/7126/1 && git cherry-pick FETCH_HEAD
+  cd ${bosh_install_path} && git fetch ssh://${gerrit_user}@reviews.cloudfoundry.org:29418/bosh refs/changes/19/7119/1 && git cherry-pick FETCH_HEAD
+fi

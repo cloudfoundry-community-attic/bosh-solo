@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+ENV["BUNDLE_GEMFILE"] = "/bosh/agent/Gemfile"
+require "rubygems"
+require "bundler/setup"
+$:.unshift("/bosh/agent/lib")
+require "agent"
+
+Bosh::Agent::Config.setup({"logging" => { "file" => STDOUT, "level" => "DEBUG" }, "mbus" => nil, "blobstore_options" => {}})
+p Bosh::Agent::Monit.monit_info
+p Bosh::Agent::Monit.get_status
+p Bosh::Agent::Monit.get_system_status
+p Bosh::Agent::Monit.get_vitals
+p Bosh::Agent::Monit.service_group_state
+p Bosh::Agent::Monit.monit_credentials
+

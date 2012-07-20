@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Continuously updates to latest dev BOSH release
+#
+# Whenever `bosh create release` is completed, the
+# release is automatically installed (via `scripts/update`)
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+[ "$(whoami)" != 'vagrant' ] && ( echo ERROR: run as vagrant user; exit 1 )
+
+cd $(dirname $0)/..
+release_path=$(pwd)
+scripts=${release_path}/scripts
+
+base_dir=/var/vcap
+
+manifest_path=${1:-UNKNOWNFILE}
+if [[ ! -f ${manifest_path} ]]; then
+  echo "USAGE: update MANIFEST_PATH"
+  echo "  # MANIFEST_PATH - YAML file, contains 'properties' key."
+  exit 1
+fi
+
+kicker -c -e "sudo chpst -u vcap:vcap ${scripts}/update ${manifest_path}" ${release_path}/dev_releases/index.yml 

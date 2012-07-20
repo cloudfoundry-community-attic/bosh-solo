@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+# Prints path to the latest release tarball
+# Creates release tarball if not already created
+#
+# Uses internal bosh CLI code
+
+work_dir = ARGV.shift || "/vagrant"
+
+require "yaml"
+require "rubygems"
+
+ENV["BUNDLE_GEMFILE"] = "/bosh/cli/Gemfile"
+require "bundler/setup"
+$:.unshift("/bosh/cli/lib")
+require "cli"
+
+# Convert a full host-machine file path (relative to release project)
+# into a full guest-machine file path
+# e.g.
+# from: /Users/drnic/Projects/bosh_releases/rackapp-boshrelease/dev_releases/rackapp-boshrelease-0.6-dev.yml
+# to: /vagrant/dev_releases/rackapp-boshrelease-0.6-dev.yml
+def local_manifest_path(hostmachine_manifest_path, work_dir)
+  if hostmachine_manifest_path =~ %r{(/(?:dev_releases|releases)/.*)$}
+    File.join(work_dir, $1)
+  else
+    hostmachine_manifest_path
+  end
+end
+
+Bosh::Cli::Config.output = STDERR
+
+# assumes that latest release is a manifest yaml file
+# e.g. dev_releases/rackapp-boshrelease-0.6-dev.yml
+# e.g. releases/rackapp-boshrelease-2.yml
+release            = Bosh::Cli::Release.new(work_dir)
+host_manifest_path = release.latest_release_filename
+manifest_path      = local_manifest_path(host_manifest_path, work_dir)
+
+release_tgz_path = manifest_path.gsub(/yml$/, 'tgz')
+
+unless File.exists?(release_tgz_path)
+  manifest           = YAML.load_file(manifest_path)
+  remote_release     = nil
+  package_matches    = []
+  blobstore          = release.blobstore
+
+  compiler =
+    Bosh::Cli::ReleaseCompiler.new(manifest_path, blobstore,
+                                   remote_release, package_matches)
+  unless compiler.exists?
+    compiler.tarball_path = release_tgz_path
+    compiler.compile
+  end
+end
+
+puts release_tgz_path

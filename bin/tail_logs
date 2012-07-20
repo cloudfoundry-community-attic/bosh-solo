@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Tails all *.log files for jobs and monit
+# Any arguments passed directly to tail command
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+cd $(dirname $0)/..
+release_path=$(pwd)
+scripts=${release_path}/scripts
+
+logs=$(${scripts}/helpers/list_logs)
+tail $logs $@

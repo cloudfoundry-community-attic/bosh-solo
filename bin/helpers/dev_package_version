@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+
+def error_show_usage; $stderr.puts "USAGE: dev_package_version PACKAGE_NAME"; exit 1; end
+def error_unknown_package; $stderr.puts "Package never included in a release; run 'bosh create release' first"; exit 1; end
+def error_create_release; $stderr.puts "Run 'bosh create release' first"; exit 1; end
+
+package_name = ARGV.shift
+error_show_usage unless package_name
+
+latest_dev_release = `ls -t dev_releases/*-dev.yml`.lines.first.strip
+error_create_release unless latest_dev_release.size > 0
+
+latest_dev_release_yaml = YAML.load_file(latest_dev_release)
+package = latest_dev_release_yaml["packages"].find {|p| p["name"] == package_name }
+
+error_unknown_package unless package
+
+puts package["version"]

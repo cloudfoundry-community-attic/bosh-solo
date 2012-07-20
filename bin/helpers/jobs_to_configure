@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# Prints jobs in latest release
+
+require "yaml"
+
+latest_dev_release = `ls -t dev_releases/*-dev.yml`.lines.first.strip
+latest_dev_release_yaml = YAML.load_file(latest_dev_release)
+jobs = latest_dev_release_yaml["jobs"]
+jobs.map {|p| puts p["name"]}

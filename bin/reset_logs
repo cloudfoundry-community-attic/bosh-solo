@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Empties all *.log files for jobs and monit
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+cd $(dirname $0)/..
+release_path=$(pwd)
+scripts=${release_path}/scripts
+
+logs=$(${scripts}/helpers/list_logs)
+for log in $logs
+do
+  echo emtpying $log...
+  cat /dev/null > $log
+done

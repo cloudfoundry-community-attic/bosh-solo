@@ -1,0 +1,175 @@
+#!/usr/bin/env ruby
+
+# AIM: Install each job (and its packages, if not already installed) as if each being applied to own VM
+
+# Render the jobs & templates in your local release into your /var/vcap/data/jobs
+# Any properties required by templates should be passed via a manifest file (manifest_path, 'properties' key)
+# You can also limit which jobs are installed via the manifest file (manifest_path, 'jobs' key)
+#
+# See examples/ folder for example manifest_path files
+# Top level keys of manifest_path file are:
+# - jobs: restricted list of job names to install (optional; defaults to all)
+# - properties: example job template properties
+
+release_tgz      = ARGV.shift
+manifest_path    = ARGV.shift
+
+logging_level = (ENV['LOG_LEVEL'] || 'WARN').upcase
+base_dir      = ENV['BASE_DIR'] || '/var/vcap'
+
+def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; exit 1; end
+def error_usage; error "USAGE: apply_jobs RELEASE_TGZ MANIFEST_PATH"; end
+def error_path_invalid(field); error "ERROR: Path #{field} does not exist"; end
+def error_yaml_format_required(error); error "Invalid YAML format for #{manifest_path}", error; end
+def error_manifest_jobs_format; error "Manifest 'job' is an array of job names"; end
+
+error_usage unless manifest_path
+error_path_invalid('RELEASE_TGZ') unless File.exist?(release_tgz)
+error_path_invalid('MANIFEST_PATH') unless File.exist?(manifest_path)
+
+require "yaml"
+require "erb"
+
+ENV["BUNDLE_GEMFILE"] = "/bosh/agent/Gemfile"
+require "rubygems"
+require "webmock"
+include WebMock::API
+
+require "bundler/setup"
+$:.unshift("/bosh/agent/lib")
+require "agent"
+
+begin
+  deployment_manifest = YAML.load_file(manifest_path)
+rescue ArgumentError => e
+  error_yaml_format_required
+end
+
+# See examples/ folder for example manifest_path files
+# Top level keys of manifest_path file are:
+# - jobs: restricted list of job names to install (optional; defaults to all)
+# - properties: example job template properties
+deployment_properties = deployment_manifest["properties"]
+requested_jobs = deployment_manifest["jobs"]
+
+# optional to specify list of jobs; else install all
+if requested_jobs
+  error_manifest_jobs_format unless requested_jobs.is_a?(Array) && requested_jobs.first.is_a?(String)
+end
+
+latest_dev_release_path = `ls -t dev_releases/*-dev.yml`.lines.first.strip
+latest_dev_release = YAML.load_file(latest_dev_release_path)
+
+release_name    = latest_dev_release["name"]
+release_version = latest_dev_release["version"]
+
+# optional to specify list of jobs; else install all
+available_jobs = latest_dev_release["jobs"]
+if requested_jobs
+  jobs = available_jobs.select { |job| requested_jobs.include? job["name"] }
+else
+  jobs = available_jobs.clone
+end
+
+# Create spec of all packages to be installed by all jobs
+#
+# In normal bosh, a job would depend on a subset of packages
+# During agent #job_install, only those subset of packages would be installed
+# and any other already-installed packages would be removed
+#
+# Because of the removal step, we will tell the agent to install
+# all packages for all jobs.
+#
+# As there is no blobstore, we stub the HTTP request to the blobstore
+# to return the compiled_package blob; using webmock's #stub_request
+packages_spec = {}
+# For each package, add the latest compiled_package; e.g.
+# {
+#   "common" => { "name" => "common", "version" => "0.2-dev", "sha1" => Digest::SHA1.file(package_common_tgz).hexdigest, "blobstore_id" => "package_common_blobstore" }
+# }
+compiled_packages_path="#{base_dir}/data/compiled_packages/"
+Dir[compiled_packages_path + "*"].each do |compiled_package_path|
+  latest_compiled_package = `ls -t #{compiled_package_path}/*.compiled`.lines.first.strip
+  latest_compiled_package =~ %r{/([^/]+).compiled$} # find "0.5-dev" within "...packages/compiled/some-package/0.5-dev.compiled"
+  name              = File.basename(compiled_package_path)
+  version           = $1
+  sha1              = Digest::SHA1.file(latest_compiled_package).hexdigest
+  fake_blobstore_id = "compiled_package_#{name}"
+  packages_spec[name] = {
+    "name" => name,
+    "version" => version,
+    "sha1" => sha1,
+    "blobstore_id" => fake_blobstore_id # matches stub_request below
+  }
+  stub_request(:get, "http://resources/#{fake_blobstore_id}?").to_return(:body => File.read(latest_compiled_package))
+end
+
+# Clear out monit symlinks
+# Normally BOSH agent does this, but we're managing
+# monitrc symlinks manually so that we can
+# install multiple jobs into same VM
+Dir["/var/vcap/monit/job/*"].each do |f|
+  FileUtils.rm_rf(f)
+end
+
+saved_symlinks = {}
+jobs.each do |job|
+  puts "Applying job #{job.inspect}"
+  # if $package_version contains a decimal point, then its a dev build (.dev_builds),
+  # else a finalized package
+  job_version = job['version'].to_s
+  build_folder = job_version =~ /dev/ ? '.dev_builds' : '.final_builds'
+  job_tgz = "#{build_folder}/jobs/#{job['name']}/#{job['version']}.tgz"
+  job_sha1 = Digest::SHA1.file(job_tgz).hexdigest
+  
+  # +job+ contains:
+  # - name: app
+  #   version: 0.2-dev or 1
+  #   sha1: b53fb0cb1bea8a13e4a51b273c17371a16d3918d
+  
+  # required for spec: name template version sha1 blobstore_id
+  apply_job_spec = job.merge({
+    "template" => job["name"],
+    "version" => job_version,             # ensure its a string
+    "blobstore_id" => "job_app_blobstore" # matches stub_request below
+  })
+  
+  apply_spec = {
+    "deployment" => "deployment",
+    "release" => { "version" => release_version },
+    "job" => apply_job_spec,
+    "packages" => packages_spec,       # install all packages for all jobs
+    "configuration_hash" => "deadbeef", # TODO what's this for?
+    "properties" => deployment_properties
+  }
+
+  Bosh::Agent::Config.base_dir = base_dir
+
+  # setup taken from apply_spec.rb in bosh/agent
+  Bosh::Agent::Config.setup({"logging" => { "file" => STDOUT, "level" => logging_level }, "mbus" => nil, "blobstore_options" => {}})
+  Bosh::Agent::Config.blobstore_provider = "simple"
+  Bosh::Agent::Config.platform_name = "dummy"
+
+  FileUtils.mkdir_p(File.join(base_dir, 'monit'))
+  Bosh::Agent::Monit.setup_monit_user
+
+  stub_request(:get, "http://resources/job_app_blobstore?").to_return(:body => File.read(job_tgz))
+
+  Bosh::Agent::Message::Apply.process([apply_spec])
+  
+  # Need to rescue all job/*.monitrc files (and their symlinks)
+  # as next Apply.process will destroy them.
+  # Rescue them by deleting the /var/vcap/monit/jobs/*.monitrc symlink
+  # and restore it below
+  Dir["/var/vcap/monit/job/*"].each do |f|
+    saved_symlinks[f.to_s] = File.readlink(f)
+    FileUtils.rm_rf(f)
+  end
+
+  # TODO Use colocation (multiple job-templates with one wrapper deployment-job)
+end
+
+# Restore all job/*.monitrc files and recreate symlinks
+saved_symlinks.each do |link_path, monitrc|
+  Bosh::Agent::Util.create_symlink(monitrc, link_path)
+end

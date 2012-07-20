@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+# Prints an ordered list of packages to be installed, based on their dependencies
+
+work_dir = ARGV.shift || "/vagrant"
+
+require "yaml"
+require "rubygems"
+
+ENV["BUNDLE_GEMFILE"] = "/bosh/cli/Gemfile"
+require "bundler/setup"
+$:.unshift("/bosh/cli/lib")
+require "cli"
+
+include Bosh::Cli::DependencyHelper # for tsort_packages
+
+# Convert a full host-machine file path (relative to release project)
+# into a full guest-machine file path
+# e.g.
+# from: /Users/drnic/Projects/bosh_releases/rackapp-boshrelease/dev_releases/rackapp-boshrelease-0.6-dev.yml
+# to: /vagrant/dev_releases/rackapp-boshrelease-0.6-dev.yml
+def local_manifest_path(hostmachine_manifest_path, work_dir)
+  if hostmachine_manifest_path =~ %r{(/(?:dev_releases|releases)/.*)$}
+    File.join(work_dir, $1)
+  else
+    hostmachine_manifest_path
+  end
+end
+
+Bosh::Cli::Config.output = STDERR
+
+# assumes that latest release is a manifest yaml file
+# e.g. dev_releases/rackapp-boshrelease-0.6-dev.yml
+# e.g. releases/rackapp-boshrelease-2.yml
+release            = Bosh::Cli::Release.new(work_dir)
+host_manifest_path = release.latest_release_filename
+manifest_path      = local_manifest_path(host_manifest_path, work_dir)
+manifest           = YAML.load_file(manifest_path)
+
+package_index = manifest["packages"].inject({}) do |index, package|
+  index[package["name"]] = package["dependencies"]
+  index
+end
+sorted_packages = tsort_packages(package_index)
+sorted_packages.each do |package_name|
+  puts package_name
+end
