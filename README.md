@@ -13,7 +13,6 @@ apt-get install git-core -y
 
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
-sm bosh-solo dependencies/install_bosh
 ```
 
 ### Updating bosh-solo
@@ -48,10 +47,12 @@ sudo su -
 curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
 source /etc/profile.d/sm.sh
 apt-get install git-core -y
+
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
-sm bosh-solo dependencies/install_bosh
+
 git clone git://github.com/drnic/bosh-sample-release.git -b examples
 cd bosh-sample-release
+bosh create release
 sm bosh-solo update examples/solo.yml
 ```
