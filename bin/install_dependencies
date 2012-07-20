@@ -11,7 +11,7 @@ typeset bosh_dir=${BOSH_DIR:-/bosh}
 
 apt-get update
 apt-get install -y --force-yes build-essential flex bison upstart runit patch g++ libxml2-dev \
-  libxslt-dev libpq-dev git-core libsqlite3-dev vim curl unzip libreadline5-dev || exit 1
+  libxslt-dev libpq-dev git-core libsqlite3-dev vim curl unzip libreadline5-dev
 
 if [[ ! -d /home/vcap ]]
 then
