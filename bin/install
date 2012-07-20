@@ -9,7 +9,7 @@ base_dir=/var/vcap
 
 cd $(dirname $0)/..
 release_path=$(pwd)
-scripts=${release_path}/scripts
+scripts=${release_path}/bin
 
 # preserve env variables
 gem_home=$GEM_HOME; bundle_gemfile=$BUNDLE_GEMFILE; rubyopt=$RUBYOPT

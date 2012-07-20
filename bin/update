@@ -13,7 +13,7 @@ set -u # report the usage of uninitialized variables
 
 cd $(dirname $0)/..
 release_path=$(pwd)
-scripts=${release_path}/scripts
+scripts=${release_path}/bin
 
 base_dir=/var/vcap
 

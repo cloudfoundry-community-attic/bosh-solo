@@ -10,7 +10,7 @@ jobs_dir=${base_dir}/data/jobs
 
 cd $(dirname $0)/..
 release_path=$(pwd)
-scripts=${release_path}/scripts
+scripts=${release_path}/bin
 
 ${scripts}/helpers/start_monit
 

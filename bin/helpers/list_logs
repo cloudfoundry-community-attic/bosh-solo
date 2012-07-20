@@ -10,7 +10,7 @@ set -u # report the usage of uninitialized variables
 
 cd $(dirname $0)/..
 release_path=$(pwd)
-scripts=${release_path}/scripts
+scripts=${release_path}/bin
 
 # TODO - add package's **/*.log too (e.g. webapps)
 
