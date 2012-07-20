@@ -53,8 +53,7 @@ rake bundle_install
 rake build
 
 cd ${release_path}
-bundle --local
-
-./${scripts}/dependencies/install_roundup
-
-cd ${release_path}
+if [[ -f Gemfile ]]
+then
+  bundle --local
+fi
