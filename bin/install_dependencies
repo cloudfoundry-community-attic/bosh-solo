@@ -43,6 +43,7 @@ if [[ -d /home/vagrant ]]
 then
   echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vagrant/.bashrc
 fi
+source ~/.bashrc
 
 sm bosh-solo dependencies/install_bosh /bosh
 
