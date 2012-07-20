@@ -11,11 +11,10 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-release_path=$(pwd)
+typeset release_path=$(pwd)
+typeset base_dir=/var/vcap
 
-base_dir=/var/vcap
-
-manifest_path=${1:-UNKNOWNFILE}
+typeset manifest_path=${extension_args[1]:-UNKNOWNFILE}
 if [[ ! -f ${manifest_path} ]]; then
   echo "USAGE: update MANIFEST_PATH"
   echo "  # MANIFEST_PATH - YAML file, contains 'properties' key."

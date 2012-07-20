@@ -15,7 +15,7 @@ release_path=$(pwd)
 log_dir=/var/vcap/sys/log
 mkdir -p ${log_dir}
 
-action=${1:-all}
+action=${extension_args[1]:-all}
 if [[ ${action} = 'errors' ]]
 then
   find ${log_dir} -name "monit_debugger*.log"

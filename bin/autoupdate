@@ -14,7 +14,7 @@ release_path=$(pwd)
 
 base_dir=/var/vcap
 
-manifest_path=${1:-UNKNOWNFILE}
+manifest_path=${extension_args[1]:-UNKNOWNFILE}
 if [[ ! -f ${manifest_path} ]]; then
   echo "USAGE: update MANIFEST_PATH"
   echo "  # MANIFEST_PATH - YAML file, contains 'properties' key."
