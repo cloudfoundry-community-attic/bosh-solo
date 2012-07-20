@@ -21,4 +21,4 @@ fi
 
 cd ${bosh_install_path}
 rake bundle_install
-
+rake build
