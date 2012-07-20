@@ -44,6 +44,8 @@ then
   echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vagrant/.bashrc
 fi
 
+sm bosh-solo dependencies/install_bosh /bosh
+
 if [[ -x /var/vcap/bosh/bin/monit ]]
 then
   /var/vcap/bosh/bin/monit -V
