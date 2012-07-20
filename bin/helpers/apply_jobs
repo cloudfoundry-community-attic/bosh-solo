@@ -18,7 +18,7 @@ logging_level = (ENV['LOG_LEVEL'] || 'WARN').upcase
 base_dir      = ENV['BASE_DIR'] || '/var/vcap'
 
 def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; exit 1; end
-def error_usage; error "USAGE: apply_jobs RELEASE_TGZ MANIFEST_PATH"; end
+def error_usage; $stderr.puts "USAGE: apply_jobs RELEASE_TGZ MANIFEST_PATH"; end
 def error_path_invalid(field); error "ERROR: Path #{field} does not exist"; end
 def error_yaml_format_required(error); error "Invalid YAML format for #{manifest_path}", error; end
 def error_manifest_jobs_format; error "Manifest 'job' is an array of job names"; end
