@@ -22,12 +22,10 @@ if [[ ! -f ${manifest_path} ]]; then
 fi
 
 sm bosh-solo stop || true
-logs=$(sm bosh-solo helpers/list_logs)
-if [[ $logs ]]
-then
-  echo rm $logs
+for log in $(sm bosh-solo helpers/list_logs)
+do
   rm $logs
-fi
+done
 
 sm bosh-solo install
 sm bosh-solo configure ${manifest_path}
