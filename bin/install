@@ -8,15 +8,14 @@ set -e # exit immediately if a simple command exits with a non-zero status
 base_dir=/var/vcap
 
 release_path=$(pwd)
-scripts=${release_path}/bin
 
 # preserve env variables
 gem_home=$GEM_HOME; bundle_gemfile=$BUNDLE_GEMFILE; rubyopt=$RUBYOPT
 
 # iterate over sorted list of packages to install from `packages_to_install` script
-for package in $(${scripts}/helpers/packages_to_install ${release_path})
+for package in $(sm bosh-solo helpers/packages_to_install ${release_path})
 do
-  package_version=$(${scripts}/helpers/dev_package_version ${package})
+  package_version=$(sm bosh-solo helpers/dev_package_version ${package})
   
   # agent's compile_package#start sequence:
   # - install_dependencies

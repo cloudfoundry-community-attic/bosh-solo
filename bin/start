@@ -9,9 +9,8 @@ base_dir=/var/vcap
 jobs_dir=${base_dir}/data/jobs
 
 release_path=$(pwd)
-scripts=${release_path}/bin
 
-${scripts}/helpers/start_monit
+sm bosh-solo helpers/start_monit
 
-echo "${scripts}/tail_logs -f      # tail all logs"
-echo "${scripts}/tail_logs -n 200  # show all logs"
+echo "sm bosh-solo tail_logs -f      # tail all logs"
+echo "sm bosh-solo tail_logs -n 200  # show all logs"

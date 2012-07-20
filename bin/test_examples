@@ -9,14 +9,13 @@ set -u # report the usage of uninitialized variables
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
 release_path=$(pwd)
-scripts=${release_path}/bin
 
 examples=$(ls -R ${release_path}/examples/*.yml)
 
 echo "|"
 echo "| Stopping any existing jobs"
 echo "|"
-${scripts}/stop
+sm bosh-solo stop
 
 for example in ${examples}
 do
@@ -24,7 +23,7 @@ do
   echo "| Testing configuration template rendering:"
   echo "| * ${example}"
   echo "|"
-  ${scripts}/configure ${example}
+  sm bosh-solo configure ${example}
 done
 
 # TODO - there is no test/assertion below
@@ -38,5 +37,5 @@ do
   echo "| Testing full update & start sequences:"
   echo "| * ${example}"
   echo "|"
-  ${scripts}/update ${example}
+  sm bosh-solo update ${example}
 done

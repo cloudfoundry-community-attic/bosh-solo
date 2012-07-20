@@ -20,15 +20,14 @@ base_dir=/var/vcap
 jobs_dir=${base_dir}/data/jobs
 
 release_path=$(pwd)
-scripts=${release_path}/bin
 
 if [[ -d ${base_dir} ]]
 then
   echo Configuring jobs...
 else
-  echo Run "${scripts}/install" first!
+  echo Run "sm bosh-solo install" first!
   exit 1
 fi
 
-release_tgz=$(${scripts}/helpers/create_release_tgz ${release_path})
-${scripts}/helpers/apply_jobs ${release_tgz} ${manifest_template}
+release_tgz=$(sm bosh-solo helpers/create_release_tgz ${release_path})
+sm bosh-solo helpers/apply_jobs ${release_tgz} ${manifest_template}
