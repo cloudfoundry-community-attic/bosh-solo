@@ -22,7 +22,7 @@ if [[ ! -f ${manifest_path} ]]; then
 fi
 
 sm bosh-solo stop || true
-typeset logs=$(sm bosh-solo helpers/list_logs)
+logs=$(sm bosh-solo helpers/list_logs)
 if [[ $logs ]]
 then
   echo rm $logs
