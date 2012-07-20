@@ -8,7 +8,7 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-typeset manifest_template=${extension_args[1]}
+typeset manifest_template=ARGV[1]
 if [[ ! -f ${manifest_template} ]]; then
   echo "USAGE: configure MANIFEST_TEMPLATE"
   echo "  # MANIFEST_TEMPLATE - YAML file, contains 'properties' key."
