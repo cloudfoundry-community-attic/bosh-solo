@@ -5,7 +5,7 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-roundup_version=0.0.5
+typeset roundup_version=0.0.5
 
 cd /tmp
 rm -rf bmizerany-roundup-*

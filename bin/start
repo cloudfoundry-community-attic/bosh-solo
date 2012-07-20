@@ -5,10 +5,10 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-base_dir=/var/vcap
-jobs_dir=${base_dir}/data/jobs
+typeset base_dir=/var/vcap
+typeset jobs_dir=${base_dir}/data/jobs
 
-release_path=$(pwd)
+typeset release_path=$(pwd)
 
 sm bosh-solo helpers/start_monit
 

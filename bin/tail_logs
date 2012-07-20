@@ -6,7 +6,7 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-release_path=$(pwd)
+typeset release_path=$(pwd)
 
-logs=$(sm bosh-solo helpers/list_logs)
+typeset logs=$(sm bosh-solo helpers/list_logs)
 tail $logs ${extension_args[@]}

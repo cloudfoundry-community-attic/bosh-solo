@@ -21,13 +21,14 @@ if [[ ! -f ${manifest_path} ]]; then
   exit 1
 fi
 
-./scripts/stop || true
-logs=$(./scripts/helpers/list_logs)
+sm bosh-solo stop || true
+typeset logs=$(sm bosh-solo helpers/list_logs)
 if [[ $logs ]]
 then
   echo rm $logs
   rm $logs
 fi
-./scripts/install
-./scripts/configure ${manifest_path}
-./scripts/start
+
+sm bosh-solo install
+sm bosh-solo configure ${manifest_path}
+sm bosh-solo start

@@ -3,8 +3,8 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-bosh_install_path=${extension_args[1]:-/bosh}
-gerrit_user=${extension_args[2]:-skip}
+typeset bosh_install_path=${extension_args[1]:-/bosh}
+typeset gerrit_user=${extension_args[2]:-skip}
 
 if [[ -d ${bosh_install_path} ]]
 then

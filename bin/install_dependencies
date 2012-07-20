@@ -5,9 +5,9 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-release_path=$(pwd)
+typeset release_path=$(pwd)
 
-bosh_dir=${BOSH_DIR:-/bosh}
+typeset bosh_dir=${BOSH_DIR:-/bosh}
 
 apt-get update
 apt-get install -y --force-yes build-essential flex bison upstart runit patch g++ libxml2-dev \
