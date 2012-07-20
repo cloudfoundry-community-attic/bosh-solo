@@ -10,7 +10,6 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'vagrant' ] && ( echo ERROR: run as vagrant user; exit 1 )
 
-cd $(dirname $0)/..
 release_path=$(pwd)
 scripts=${release_path}/bin
 

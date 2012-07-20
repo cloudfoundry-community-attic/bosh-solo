@@ -19,7 +19,6 @@ fi
 base_dir=/var/vcap
 jobs_dir=${base_dir}/data/jobs
 
-cd $(dirname $0)/..
 release_path=$(pwd)
 scripts=${release_path}/bin
 

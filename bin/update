@@ -11,7 +11,6 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-cd $(dirname $0)/..
 release_path=$(pwd)
 scripts=${release_path}/bin
 

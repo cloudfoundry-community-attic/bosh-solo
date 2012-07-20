@@ -7,7 +7,6 @@ set -e # exit immediately if a simple command exits with a non-zero status
 
 base_dir=/var/vcap
 
-cd $(dirname $0)/..
 release_path=$(pwd)
 scripts=${release_path}/bin
 

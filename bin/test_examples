@@ -8,7 +8,6 @@ set -u # report the usage of uninitialized variables
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-cd $(dirname $0)/..
 release_path=$(pwd)
 scripts=${release_path}/bin
 
