@@ -27,5 +27,10 @@ fi
 
 
 cd ${bosh_install_path}
+which ruby
+ruby -v
+which gem
+gem env
+gem list
 rake bundle_install
 
