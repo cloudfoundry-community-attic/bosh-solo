@@ -27,12 +27,17 @@ def local_manifest_path(hostmachine_manifest_path, work_dir)
   end
 end
 
+def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; exit 1; end
+def error_no_release_created; error "ERROR: Please create a BOSH release first.", "Run:", "  bosh create release"; end
+
 Bosh::Cli::Config.output = STDERR
 
 # assumes that latest release is a manifest yaml file
 # e.g. dev_releases/rackapp-boshrelease-0.6-dev.yml
 # e.g. releases/rackapp-boshrelease-2.yml
 release            = Bosh::Cli::Release.new(work_dir)
+error_no_release_created unless release.latest_release_filename
+
 host_manifest_path = release.latest_release_filename
 manifest_path      = local_manifest_path(host_manifest_path, work_dir)
 manifest           = YAML.load_file(manifest_path)
