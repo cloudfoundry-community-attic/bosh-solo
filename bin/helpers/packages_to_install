@@ -27,7 +27,7 @@ def local_manifest_path(hostmachine_manifest_path, work_dir)
   end
 end
 
-def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; exit 1; end
+def error(*msgs); msgs.each {|msg| $stderr.puts msg}; exit 1; end
 def error_no_release_created; error "ERROR: Please create a BOSH release first.", "Run:", "  bosh create release"; end
 
 Bosh::Cli::Config.output = STDERR
