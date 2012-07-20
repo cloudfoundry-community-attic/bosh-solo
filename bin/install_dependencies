@@ -23,7 +23,6 @@ do
 done
 sm ruby install
 
-
 if [[ ! -d /home/vcap ]]
 then
   bosh_users_password=vcap
@@ -38,11 +37,11 @@ then
   done
 fi
 
-echo "export PATH=/var/vcap/bosh/bin:\$PATH" >> /root/.bashrc
-echo "export PATH=/var/vcap/bosh/bin:\$PATH" >> /home/vcap/.bashrc
+echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /root/.bashrc
+echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vcap/.bashrc
 if [[ -d /home/vagrant ]]
 then
-  echo "export PATH=/var/vcap/bosh/bin:\$PATH" >> /home/vagrant/.bashrc
+  echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vagrant/.bashrc
 fi
 
 if [[ -x /var/vcap/bosh/bin/monit ]]
