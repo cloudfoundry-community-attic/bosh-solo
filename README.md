@@ -15,8 +15,12 @@ sm bosh-solo install_dependencies
 
 ## Usage
 
+Within your BOSH release, create a dev release (which will also sync download any blobs that are required), and run the `update` command.
+
 ```
-cd path/to/bosh_release
+git clone git://location.com/your/bosh_release.git
+cd bosh_release
+bosh create release
 sm bosh-solo update path/to/manifest.yml
 ```
 
