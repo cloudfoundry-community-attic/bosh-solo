@@ -9,4 +9,4 @@ set -u # report the usage of uninitialized variables
 release_path=$(pwd)
 
 logs=$(sm bosh-solo helpers/list_logs)
-tail $logs $@
+tail $logs ${extension_args[@]}

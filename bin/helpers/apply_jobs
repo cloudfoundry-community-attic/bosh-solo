@@ -92,7 +92,7 @@ Dir[compiled_packages_path + "*"].each do |compiled_package_path|
   latest_compiled_package = `ls -t #{compiled_package_path}/*.compiled`.lines.first.strip
   latest_compiled_package =~ %r{/([^/]+).compiled$} # find "0.5-dev" within "...packages/compiled/some-package/0.5-dev.compiled"
   name              = File.basename(compiled_package_path)
-  version           = $1
+  version           = ${extension_args[1]}
   sha1              = Digest::SHA1.file(latest_compiled_package).hexdigest
   fake_blobstore_id = "compiled_package_#{name}"
   packages_spec[name] = {

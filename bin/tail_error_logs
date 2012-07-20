@@ -10,4 +10,4 @@ release_path=$(pwd)
 
 logs=$(sm bosh-solo helpers/list_logs errors)
 echo $logs
-tail $logs $@
+tail $logs ${extension_args[@]}
