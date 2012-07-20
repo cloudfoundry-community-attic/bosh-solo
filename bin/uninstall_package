@@ -10,5 +10,13 @@ then
   echo 'USAGE: sm bosh-solo uninstall_package PACKAGE'
 fi
 
-rm -rf ${base_dir}/data/packages/${package}
-rm -rf ${base_dir}/data/compiled_packages/${package}
+
+for dir in ${base_dir}/data/packages/${package} ${base_dir}/data/compiled_packages/${package}
+do
+  if [[ -d ${dir} ]]
+  then
+    echo deleting ${dir}
+  else
+    echo missing ${dir}, skipping...
+  fi
+done
