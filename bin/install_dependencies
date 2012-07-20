@@ -16,12 +16,15 @@ apt-get install -y --force-yes build-essential flex bison upstart runit patch g+
 # install ruby and dependencies
 apt-get install m4 libtool autoconf automake -y
 
-sm set install all
-for package in openssl ncurses pkg-config readline zlib libyaml
-do
-  sm ${package} package install
-done
-sm ruby install
+# sm set install all
+# for package in openssl ncurses pkg-config readline zlib libyaml
+# do
+#   sm ${package} package install
+# done
+# sm ruby install
+curl -L https://get.rvm.io | bash -s stable
+$rvm_path/bin/rvm install 1.9.3
+$rvm_path/bin/rvm use 1.9.3 --default
 
 if [[ ! -d /home/vcap ]]
 then
