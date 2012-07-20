@@ -4,11 +4,9 @@ set -e # exit immediately if a simple command exits with a non-zero status
 
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
-if [[ ! -x ruby ]]
-  sm set install all
-  for package in openssl readline zlib libyaml
-  do
-    sm ${package} package install
-  done
-  sm ruby install
-fi
+sm set install all
+for package in openssl readline zlib libyaml
+do
+  sm ${package} package install
+done
+sm ruby install
