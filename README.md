@@ -13,6 +13,12 @@ sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
 ```
 
+### Updating bosh-solo
+
+```
+sm ext update bosh-solo
+```
+
 ## Usage
 
 Within your BOSH release, create a dev release (which will also sync download any blobs that are required), and run the `update` command.
@@ -29,7 +35,7 @@ sm bosh-solo update path/to/manifest.yml
 TODO: Make the following example BOSH release
 
 ```
-git clone git://github.com/drnic/bosh-sample-release.git
+git clone git://github.com/drnic/bosh-sample-release.git -b examples
 cd bosh-sample-release
 sm bosh-solo update examples/solo.yml
 ```
