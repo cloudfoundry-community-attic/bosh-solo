@@ -8,6 +8,4 @@ set -u # report the usage of uninitialized variables
 
 typeset release_path=$(pwd)
 
-typeset logs=$(sm bosh-solo helpers/list_logs errors)
-echo $logs
-tail $logs ${extension_args[@]}
+tail $(sm bosh-solo helpers/list_logs errors) ${extension_args[@]}
