@@ -46,10 +46,6 @@ fi
 
 gem install bundler rake --no-ri --no-rdoc
 
-cd ${bosh_dir}
-rake bundle_install
-rake build
-
 cd ${release_path}
 if [[ -f Gemfile ]]
 then

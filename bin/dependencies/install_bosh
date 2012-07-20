@@ -24,3 +24,8 @@ else
   cd ${bosh_install_path} && git fetch ssh://${gerrit_user}@reviews.cloudfoundry.org:29418/bosh refs/changes/26/7126/1 && git cherry-pick FETCH_HEAD
   cd ${bosh_install_path} && git fetch ssh://${gerrit_user}@reviews.cloudfoundry.org:29418/bosh refs/changes/19/7119/1 && git cherry-pick FETCH_HEAD
 fi
+
+
+cd ${bosh_install_path}
+rake bundle_install
+
