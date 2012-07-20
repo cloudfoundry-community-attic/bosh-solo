@@ -12,7 +12,7 @@ if [[ -d ${bosh_install_path} ]]
 then
   echo "Updating existing project..."
   cd ${bosh_install_path}
-  git pull drnic bosh-solo-patches
+  git pull origin master
 else
   echo "Cloning..."
   mkdir -p $(dirname ${bosh_install_path})
