@@ -9,8 +9,11 @@ As root user, to install the SM framework, this project as an SM extension, and 
 ```
 curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
 source /etc/profile.d/sm.sh
+apt-get install git-core -y
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+sm bosh-solo dependencies/install_ruby
 sm bosh-solo install_dependencies
+sm bosh-solo dependencies/install_bosh
 ```
 
 ### Updating bosh-solo
@@ -33,6 +36,22 @@ sm bosh-solo update path/to/manifest.yml
 ### Example usage
 
 ```
+git clone git://github.com/drnic/bosh-sample-release.git -b examples
+cd bosh-sample-release
+sm bosh-solo update examples/solo.yml
+```
+
+The complete, end-to-end tutorial is therefore:
+
+```
+sudo su -
+curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
+source /etc/profile.d/sm.sh
+apt-get install git-core -y
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+sm bosh-solo dependencies/install_ruby
+sm bosh-solo install_dependencies
+sm bosh-solo dependencies/install_bosh
 git clone git://github.com/drnic/bosh-sample-release.git -b examples
 cd bosh-sample-release
 sm bosh-solo update examples/solo.yml
