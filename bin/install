@@ -5,17 +5,13 @@ set -e # exit immediately if a simple command exits with a non-zero status
 [ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
 
 
-base_dir=/var/vcap
-
-release_path=$(pwd)
-
-# preserve env variables
-gem_home=$GEM_HOME; bundle_gemfile=$BUNDLE_GEMFILE; rubyopt=$RUBYOPT
+typeset base_dir=/var/vcap
+typeset release_path=$(pwd)
 
 # iterate over sorted list of packages to install from `packages_to_install` script
 for package in $(sm bosh-solo helpers/packages_to_install ${release_path})
 do
-  package_version=$(sm bosh-solo helpers/dev_package_version ${package})
+  typeset package_version=$(sm bosh-solo helpers/dev_package_version ${package})
   
   # agent's compile_package#start sequence:
   # - install_dependencies
@@ -54,16 +50,16 @@ do
   # re-installed by the agent (library) from the packed blobs
 
   unset GEM_HOME; unset BUNDLE_GEMFILE; unset RUBYOPT
-  compile_base=${base_dir}/data/compile
-  install_base=${base_dir}/data/packages
+  typeset compile_base=${base_dir}/data/compile
+  typeset install_base=${base_dir}/data/packages
   export BOSH_COMPILE_TARGET=${compile_base}/${package}
   export BOSH_INSTALL_TARGET=${install_base}/${package}/${package_version}
   
   # compiled_packages will go into:
   #   /var/vcap/data/packages/compiled/$package/$package_version.compiled
-  compiled_package_path=/var/vcap/data/compiled_packages/${package}
+  typeset compiled_package_path=/var/vcap/data/compiled_packages/${package}
   mkdir -p ${compiled_package_path}
-  compiled_package="${compiled_package_path}/${package_version}.compiled"
+  typeset compiled_package="${compiled_package_path}/${package_version}.compiled"
   
   
   # skip compilation if compiled_package blob exists
@@ -116,6 +112,3 @@ do
   
   cd ${release_path}
 done
-
-# restore env variables
-GEM_HOME=$gem_home; BUNDLE_GEMFILE=$bundle_gemfile; RUBYOPT=$rubyopt
