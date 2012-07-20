@@ -26,6 +26,6 @@ TODO: Make the following example BOSH release
 
 ```
 git clone git://github.com/drnic/bosh-sample-release.git
-cd rackapp-boshrelease
+cd bosh-sample-release
 sm bosh-solo update examples/solo.yml
 ```
