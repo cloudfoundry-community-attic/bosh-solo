@@ -13,6 +13,17 @@ apt-get update
 apt-get install -y --force-yes build-essential flex bison upstart runit patch g++ libxml2-dev \
   libxslt-dev libpq-dev git-core libsqlite3-dev vim curl unzip libreadline5-dev
 
+# install ruby and dependencies
+apt-get install m4 libtool autoconf automake -y
+
+sm set install all
+for package in openssl ncurses pkg-config readline zlib libyaml
+do
+  sm ${package} package install
+done
+sm ruby install
+
+
 if [[ ! -d /home/vcap ]]
 then
   bosh_users_password=vcap
