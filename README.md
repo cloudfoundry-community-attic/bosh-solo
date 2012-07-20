@@ -32,8 +32,6 @@ sm bosh-solo update path/to/manifest.yml
 
 ### Example usage
 
-TODO: Make the following example BOSH release
-
 ```
 git clone git://github.com/drnic/bosh-sample-release.git -b examples
 cd bosh-sample-release
