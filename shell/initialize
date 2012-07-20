@@ -1,0 +1,3 @@
+#!/bin/sh
+
+user is root || log error "actions may only be run as root."
