@@ -82,6 +82,7 @@ cd /vagrant/
 sm bosh-solo update examples/example.yml
 ```
 
+The generated Vagrantfile forwards the internal port `:80` to your local machine's port `:5001`. That is [http://localhost:5001](http://localhost:5001) in your browser will go to `localhost:80` within your Vagrant VM.
 
 ### Remote VM usage
 
