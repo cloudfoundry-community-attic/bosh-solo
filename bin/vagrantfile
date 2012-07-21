@@ -8,3 +8,6 @@ set -u # report the usage of uninitialized variables
 template install "bosh-solo/Vagrantfile" \
   to "Vagrantfile" \
   mode 0644
+
+echo Now run the following to launch Vagrant:
+echo vagrant up

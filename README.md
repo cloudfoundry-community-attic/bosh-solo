@@ -43,10 +43,12 @@ source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 ```
 
-Create a `Vagrantfile` into your BOSH release.
+Create a `Vagrantfile` into your BOSH release and launch Vagrant. If you haven't used Vagrant to download the `lucid64` box before it will be automatically downloaded.
 
 ```
+gem install vagrant
 sm bosh-solo vagrantfile
+vagrant up
 ```
 
 ### Remote VM usage
