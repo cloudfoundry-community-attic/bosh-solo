@@ -43,5 +43,5 @@ done
 gem install bundler rake --no-ri --no-rdoc
 gem install webmock -v 1.8.7 --no-ri --no-rdoc
 sm bosh-solo dependencies/install_bosh /bosh
-sm bosh-solo dependencies/install_monit /bosh
+sm bosh-solo dependencies/install_monit
 
