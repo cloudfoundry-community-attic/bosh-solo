@@ -1,0 +1,13 @@
+function list_logs() {
+  typeset log_dir=/var/vcap/sys/log
+  mkdir -p ${log_dir}
+
+  typeset action=${extension_args[1]:-all}
+  if [[ ${action} = 'errors' ]]
+  then
+    find ${log_dir} -name "monit_debugger*.log"
+    find ${log_dir} -name "*err*.log"
+  else
+    find ${log_dir} -name "*.log"
+  fi
+}

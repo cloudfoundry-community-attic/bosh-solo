@@ -22,7 +22,7 @@ if [[ ! -f ${manifest_path} ]]; then
 fi
 
 sm bosh-solo stop || true
-for log in $(sm bosh-solo helpers/list_logs)
+for log in $(list_logs)
 do
   rm ${log}
 done

@@ -7,7 +7,7 @@ set -u # report the usage of uninitialized variables
 
 typeset release_path=$(pwd)
 
-typeset logs=$(sm bosh-solo helpers/list_logs)
+typeset logs=$(list_logs)
 for log in $logs
 do
   echo emtpying $log...
