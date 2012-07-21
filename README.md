@@ -46,7 +46,7 @@ sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 Create a `Vagrantfile` into your BOSH release and launch Vagrant. If you haven't used Vagrant to download the `lucid64` box before it will be automatically downloaded.
 
 ```
-sm bosh-solo vagrantfile
+sm bosh-solo local vagrantfile
 gem install vagrant
 vagrant up
 ```
