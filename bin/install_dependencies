@@ -32,13 +32,13 @@ then
   done
 fi
 
-echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /root/.bashrc
-echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vcap/.bashrc
-if [[ -d /home/vagrant ]]
-then
-  echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> /home/vagrant/.bashrc
-fi
-source ~/.bashrc
+for home_path in /root /home/vcap /home/ubuntu /home/vagrant
+do
+  if [[ -d ${home_path} ]]
+  then
+    echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> ${home_path}/.bashrc
+  fi
+done
 
 gem install bundler rake --no-ri --no-rdoc
 gem install webmock -v 1.8.7 --no-ri --no-rdoc
