@@ -201,3 +201,11 @@ cd bosh-sample-release
 bosh create release
 sm bosh-solo update examples/solo.yml
 ```
+
+## Development
+
+This section described the processes and rules for developing on bosh-solo itself.
+
+The HEAD of the master branch is the currently released version of bosh-solo, due to the installation method with SM framework.
+
+Therefore, all development and testing should be done in branches.
