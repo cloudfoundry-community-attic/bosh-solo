@@ -1,5 +1,7 @@
 # bosh-solo
 
+Develop, test and deploy BOSH releases without BOSH
+
 This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
 
 ## Installation via SM framework
