@@ -29,6 +29,14 @@ sm bosh-solo install_dependencies
 sm ext update bosh-solo
 ```
 
+### Other commands
+
+To discover the complete list of available commands, either read the scripts in [bosh-solo bin/](https://github.com/drnic/bosh-solo/tree/master/bin) folder, or run:
+
+```
+sm bosh-solo
+```
+
 ## Usage
 
 The are two modes to use: a local Vagrant VM or a remote VM.
@@ -61,6 +69,7 @@ sudo su -
 
 [inside vagrant as root user]
 apt-get install curl git-core -y
+
 curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
