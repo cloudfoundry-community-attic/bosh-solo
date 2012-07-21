@@ -11,7 +11,7 @@ The project is installed and operated by the [SM framework](https://github.com/s
 Install SM and git:
 
 ```
-curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
+curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 apt-get install git-core -y
 ```
@@ -38,7 +38,7 @@ The are two modes to use: a local Vagrant VM or a remote VM.
 [Install SM framework](https://github.com/sm/sm#installation) and bosh-solo into your local machine. Do not run `install_dependencies` as this is a script for the target Vagrant VM, not your laptop.
 
 ```
-curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
+curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 ```
@@ -49,7 +49,11 @@ Create a `Vagrantfile` into your BOSH release and launch Vagrant. If you haven't
 sm bosh-solo local vagrantfile
 gem install vagrant
 vagrant up
+vagrant ssh
 ```
+
+Inside your
+
 
 ### Remote VM usage
 
@@ -83,7 +87,7 @@ The complete, end-to-end tutorial is therefore:
 
 ```
 sudo su -
-curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
+curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 apt-get install git-core -y
 
