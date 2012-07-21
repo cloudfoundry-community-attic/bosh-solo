@@ -4,6 +4,8 @@ Develop, test and deploy BOSH releases without BOSH. It makes developing BOSH re
 
 BOSH releases describe a complete running system from the ground up - compiled packages from source, templated configuration files, and monit to start/stop processes. BOSH itself then allows you to deploy your release across 1 or more VMs with optional persistent disks on the target infrastructure of your choice.
 
+Compilation of packages is only performed once. Compilation errors of packages and template rendering errors in jobs do not affect the running system.
+
 This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
 
 ## Installation
