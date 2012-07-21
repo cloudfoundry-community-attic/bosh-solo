@@ -35,7 +35,19 @@ The are two modes to use: a local Vagrant VM or a remote VM.
 
 ### Vagrant usage
 
-Coming soon.
+[Install SM framework](https://github.com/sm/sm#installation) and bosh-solo into your local machine. Do not run `install_dependencies` as this is a script for the target Vagrant VM, not your laptop.
+
+```
+curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
+source /etc/profile.d/sm.sh
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+```
+
+Create a `Vagrantfile` into your BOSH release.
+
+```
+sm bosh-solo vagrantfile
+```
 
 ### Remote VM usage
 
