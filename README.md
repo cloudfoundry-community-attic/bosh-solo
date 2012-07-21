@@ -4,15 +4,21 @@ Develop, test and deploy BOSH releases without BOSH
 
 This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
 
-## Installation via SM framework
+## Installation
 
-As root user, to install the SM framework, this project as an SM extension, and prepare the target machine/VM for using `bosh-solo` run:
+The project is installed and operated by the [SM framework](https://github.com/sm/sm). Installation instructions for SM, git
+
+Install SM and git:
 
 ```
 curl -L https://raw.github.com/sm/sm/master/bin/sm-installer | sh
 source /etc/profile.d/sm.sh
 apt-get install git-core -y
+```
 
+Install bosh-solo and prepare the target machine/VM for deploying a BOSH release:
+
+```
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
 ```
