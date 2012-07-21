@@ -41,6 +41,7 @@ fi
 source ~/.bashrc
 
 gem install bundler rake --no-ri --no-rdoc
+gem install webmock -v 1.8.7 --no-ri --no-rdoc
 sm bosh-solo dependencies/install_bosh /bosh
 
 if [[ -x /var/vcap/bosh/bin/monit ]]
