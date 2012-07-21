@@ -23,7 +23,15 @@ sm ext update bosh-solo
 
 ## Usage
 
-Within your BOSH release, create a dev release (which will also sync download any blobs that are required), and run the `update` command.
+The are two modes to use: a local Vagrant VM or a remote VM.
+
+### Vagrant usage
+
+Coming soon.
+
+### Remote VM usage
+
+Clone your BOSH release into your remote VM. Create a dev release (which will also sync download any blobs that are required), and run the bosh-solo `update` command.
 
 ```
 git clone git://location.com/your/bosh_release.git
@@ -31,6 +39,15 @@ cd bosh_release
 bosh create release
 sm bosh-solo update path/to/manifest.yml
 ```
+
+Whenever you update your BOSH release repository, you can fetch the changes and update your remote VM with the new packages and jobs:
+
+```
+git pull origin master
+bosh create release --force
+sm bosh-solo update path/to/manifest.yml
+```
+
 
 ### Example usage
 
