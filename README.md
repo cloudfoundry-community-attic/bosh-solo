@@ -52,7 +52,35 @@ vagrant up
 vagrant ssh
 ```
 
-Inside your
+Inside your Vagrant VM you now install SM, the bosh-solo extension, and prepare the VM with dependencies:
+
+
+```
+[inside vagrant as vagrant user]
+sudo su -
+
+[inside vagrant as root user]
+apt-get install curl git-core -y
+curl -L https://get.smf.sh | sh
+source /etc/profile.d/sm.sh
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+sm bosh-solo install_dependencies
+source /etc/profile.d/rvm.sh
+rvm 1.9.3 --default
+```
+
+You are now ready to install & deploy your bosh release over and over again.
+
+Each time you want to deploy a change to your BOSH release into your Vagrant VM:
+
+```
+[within your local machine in BOSH release folder]
+bosh create release --force
+
+[inside vagrant as root user]
+cd /vagrant/
+sm bosh-solo update examples/example.yml
+```
 
 
 ### Remote VM usage
