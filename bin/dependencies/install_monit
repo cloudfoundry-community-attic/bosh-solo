@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+[ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
+
+if [[ -x /var/vcap/bosh/bin/monit ]]
+then
+  /var/vcap/bosh/bin/monit -V
+else
+  typeset -x build_dir=/bosh/agent/misc/stemcell/build2/
+  typeset work_path="/"
+  typeset -x chroot="/"
+  ${build_dir}/stages/bosh_monit/apply.sh ${work_path} || exit 1
+fi
+

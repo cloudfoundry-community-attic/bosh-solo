@@ -43,14 +43,5 @@ source ~/.bashrc
 gem install bundler rake --no-ri --no-rdoc
 gem install webmock -v 1.8.7 --no-ri --no-rdoc
 sm bosh-solo dependencies/install_bosh /bosh
-
-if [[ -x /var/vcap/bosh/bin/monit ]]
-then
-  /var/vcap/bosh/bin/monit -V
-else
-  typeset -x build_dir=/bosh/agent/misc/stemcell/build2/
-  typeset work_path="/"
-  typeset -x chroot="/"
-  ${build_dir}/stages/bosh_monit/apply.sh ${work_path} || exit 1
-fi
+sm bosh-solo dependencies/install_monit /bosh
 
