@@ -20,7 +20,7 @@ source $(/usr/local/rvm/bin/rvm 1.9.3 do rvm env --path)
 
 if [[ ! -d /home/vcap ]]
 then
-  bosh_users_password=vcap
+  typeset bosh_users_password=vcap
   /usr/sbin/addgroup --system admin
   /usr/sbin/adduser --disabled-password --gecos Ubuntu vcap
   echo "vcap:${bosh_users_password}" | /usr/sbin/chpasswd
@@ -36,6 +36,7 @@ for home_path in /root /home/vcap /home/ubuntu /home/vagrant
 do
   if [[ -d ${home_path} ]]
   then
+    echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> ${home_path}/.bashrc
     echo "export PATH=/opt/sm/bin:/opt/sm/pkg/active/bin:/var/vcap/bosh/bin:\$PATH" >> ${home_path}/.bashrc
   fi
 done
