@@ -46,6 +46,7 @@ The are two modes to use: a local Vagrant VM or a remote VM.
 [Install SM framework](https://github.com/sm/sm#installation) and bosh-solo into your local machine. Do not run `install_dependencies` as this is a script for the target Vagrant VM, not your laptop.
 
 ```
+[inside local machine]
 curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
@@ -113,7 +114,67 @@ sm bosh-solo update path/to/manifest.yml
 ```
 
 
-### Example usage
+## Full tutorials
+
+### Full tutorial on local Vagrant VM
+
+Commands below are run either within your local machine (laptop) or within a Vagrant VM that will be provisioned:
+
+Fetch the example BOSH release and create a release:
+
+```
+[inside local machine]
+git clone git://github.com/drnic/bosh-sample-release.git -b examples
+cd bosh-sample-release
+gem install bosh_cli
+bosh create release
+```
+
+Now install bosh-solo via SM framework:
+
+```
+[inside local machine]
+curl -L https://get.smf.sh | sh
+source /etc/profile.d/sm.sh
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+```
+
+Now create a Vagrant file and launch Vagrant VM:
+
+```
+[inside local machine]
+sm bosh-solo local vagrantfile
+gem install vagrant
+vagrant up
+vagrant ssh
+```
+
+You are now inside the Vagrant VM. Install bosh-solo within the VM. Also install the dependencies required for deploying BOSH releases via bosh-solo.
+
+```
+[inside vagrant as vagrant user]
+sudo su -
+
+[inside vagrant as root user]
+curl -L https://get.smf.sh | sh
+source /etc/profile.d/sm.sh
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+sm bosh-solo install_dependencies
+source /etc/profile.d/rvm.sh
+rvm 1.9.3 --default
+```
+
+Now go to `/vagrant` directory where your bosh release is shared within the VM:
+
+```
+[inside vagrant as root user]
+cd /vagrant
+sm bosh-solo update examples/solo.yml
+```
+
+### Full tutorial on remote VM
+
+All commands are run within your remove, Ubuntu 64-bit VM:
 
 ```
 git clone git://github.com/drnic/bosh-sample-release.git -b examples
