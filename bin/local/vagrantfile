@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+template install "Vagrantfile" \
+  to "Vagrantfile" \
+  mode 0644
+
+typeset green="\033[32m"
+typeset reset="\033[0m"
+log "
+  ${green}create${reset}  Vagrantfile
+Now run the following to launch Vagrant:
+ gem install vagrant
+ vagrant up
+"
