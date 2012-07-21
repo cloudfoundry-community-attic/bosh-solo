@@ -1,6 +1,8 @@
 # bosh-solo
 
-Develop, test and deploy BOSH releases without BOSH
+Develop, test and deploy BOSH releases without BOSH. It makes developing BOSH releases suck a lot less.
+
+BOSH releases describe a complete running system from the ground up - compiled packages from source, templated configuration files, and monit to start/stop processes. BOSH itself then allows you to deploy your release across 1 or more VMs with optional persistent disks on the target infrastructure of your choice.
 
 This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
 
@@ -11,9 +13,9 @@ The project is installed and operated by the [SM framework](https://github.com/s
 Install SM and git:
 
 ```
+apt-get install git-core curl -y
 curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
-apt-get install git-core -y
 ```
 
 Install bosh-solo and prepare the target machine/VM for deploying a BOSH release:
@@ -160,6 +162,7 @@ curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
+
 source /etc/profile.d/rvm.sh
 rvm 1.9.3 --default
 ```
