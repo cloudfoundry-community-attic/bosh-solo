@@ -181,7 +181,10 @@ sm bosh-solo update examples/solo.yml
 
 ### Full tutorial on remote VM
 
-All commands are run within your remove, Ubuntu 64-bit VM:
+All commands are run within your remove, Ubuntu 64-bit VM. 
+
+NOTE: Remember to attach a large enough root volume for your release (or attach it at `/var/vcap`). For example, the [oss-release](https://github.com/cloudfoundry/oss-release) (jenkins/gerrit) is too big to build against the default size 8G root volume created by fog.
+
 
 ```
 git clone git://github.com/drnic/bosh-sample-release.git -b merge
