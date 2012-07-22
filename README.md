@@ -202,6 +202,9 @@ source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
 
+source /etc/profile.d/rvm.sh
+rvm 1.9.3 --default
+
 git clone git://github.com/drnic/bosh-sample-release.git -b merge
 cd bosh-sample-release
 bosh create release
