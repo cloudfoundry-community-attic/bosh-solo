@@ -1,6 +1,6 @@
 # bosh-solo
 
-Develop, test and deploy BOSH releases without BOSH. It makes developing BOSH releases suck a lot less.
+Develop, test and deploy BOSH releases without BOSH. Develop an entire working system quickly before you deploy to production.
 
 BOSH releases describe a complete running system from the ground up - compiled packages from source, templated configuration files, and monit to start/stop processes. BOSH itself then allows you to deploy your release across 1 or more VMs with optional persistent disks on the target infrastructure of your choice.
 
