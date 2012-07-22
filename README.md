@@ -221,3 +221,12 @@ This section described the processes and rules for developing on bosh-solo itsel
 The HEAD of the master branch is the currently released version of bosh-solo, due to the installation method with SM framework.
 
 Therefore, all development and testing should be done in branches.
+
+### Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+6. Send extra spicy Doritos to Dr Nic
