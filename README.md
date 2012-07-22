@@ -8,6 +8,48 @@ Compilation of packages is only performed once. Compilation errors of packages a
 
 This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
 
+## Overview
+
+This is a tool to use during development of your BOSH releases. Each time you make a change to a package (sources or packaging) or jobs (templates or scripts), you can apply the updates to a virtual machine (local Vagrant or remote).
+
+When applying each BOSH release into a VM you can specify which jobs to run (runs all by default) and what custom properties (aka databags or attributes) are to be applied to the templates. This way you can both document different use cases of your BOSH release and test that the examples work as expected.
+
+```
+[within the VM as root]
+sm bosh-solo update path/to/manifest.yml
+```
+
+It may be a good idea to include example manifests within an `examples/` folder. For a two-tiered web application, possible manifests might be `examples/with_database.yml` with `examples/without_database.yml`. The latter might look like:
+
+``` yaml
+---
+jobs:
+  - webapp
+  - postgres
+properties:
+  webapp:
+    use_nginx: 1
+    run_migrations: 1
+    appstack: puma
+  postgres:
+    host: 127.0.0.1
+    user: todo
+    password: p03tgR3s
+    database: todo
+```
+
+You could also use a testing tool such as [roundup](http://bmizerany.github.com/roundup/ "roundup"), [minitest](https://github.com/seattlerb/minitest) or [rspec](http://rspec.info/ "RSpec.info: home") to do local integration tests. Within each group of tests, apply the current BOSH release with an example manifest and assert that specific processes and outcomes are observed.
+
+Example manifests assume that there is only one VM. For example, the `properties.postgres.host` is set to `127.0.0.1`. When the BOSH release is deployed into production it would be a real IP or DNS.
+
+Allowing you to iterate on BOSH releases within a local VM means you can quickly see any errors during package compilation or the running of jobs via monit. All log files within `/var/vcap/sys/log` can be displayed or tailed using one of the following examples:
+
+```
+sm bosh-solo tail_logs -n 200 # for each log file show last 200 lines
+sm bosh-solo tail_logs -f     # for each log file, tail any new output
+sm bosh-solo tail_error_logs  # as above, only for err/error log files
+```
+
 ## Installation
 
 The project is installed and operated by the [SM framework](https://github.com/sm/sm). Installation instructions for SM, git
