@@ -128,7 +128,7 @@ Fetch the example BOSH release and create a release:
 
 ```
 [inside local machine]
-git clone git://github.com/drnic/bosh-sample-release.git -b examples
+git clone git://github.com/drnic/bosh-sample-release.git -b merge
 cd bosh-sample-release
 gem install bosh_cli
 bosh create release
@@ -160,6 +160,8 @@ You are now inside the Vagrant VM. Install bosh-solo within the VM. Also install
 sudo su -
 
 [inside vagrant as root user]
+apt-get install curl git-core -y
+
 curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
@@ -182,7 +184,7 @@ sm bosh-solo update examples/solo.yml
 All commands are run within your remove, Ubuntu 64-bit VM:
 
 ```
-git clone git://github.com/drnic/bosh-sample-release.git -b examples
+git clone git://github.com/drnic/bosh-sample-release.git -b merge
 cd bosh-sample-release
 sm bosh-solo update examples/solo.yml
 ```
@@ -191,14 +193,16 @@ The complete, end-to-end tutorial is therefore:
 
 ```
 sudo su -
+
+apt-get install curl git-core -y
+
 curl -L https://get.smf.sh | sh
 source /etc/profile.d/sm.sh
-apt-get install git-core -y
 
 sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
 sm bosh-solo install_dependencies
 
-git clone git://github.com/drnic/bosh-sample-release.git -b examples
+git clone git://github.com/drnic/bosh-sample-release.git -b merge
 cd bosh-sample-release
 bosh create release
 sm bosh-solo update examples/solo.yml

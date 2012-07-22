@@ -11,4 +11,5 @@ log "
 Now run the following to launch Vagrant:
  gem install vagrant
  vagrant up
+ vagrant ssh
 "
