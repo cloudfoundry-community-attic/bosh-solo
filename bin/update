@@ -2,8 +2,8 @@
 
 # Updates to latest BOSH release (dev_builds)
 #
-# 1. Stop all jobs (scripts/stop)
-# 2. Archive all log files
+# 1. Archive all log files
+# 2. Stop all jobs (scripts/stop)
 # 3. Install packages (scripts/install)
 # 4. Render templates (scripts/configure MANIFEST)
 # 5. Start all jobs (scripts/start)
@@ -21,12 +21,8 @@ if [[ ! -f ${manifest_path} ]]; then
   exit 1
 fi
 
+sm bosh-solo reset_logs
 sm bosh-solo stop || true
-for log in $(list_logs)
-do
-  rm ${log}
-done
-
 sm bosh-solo install
 sm bosh-solo configure ${manifest_path}
 sm bosh-solo start
