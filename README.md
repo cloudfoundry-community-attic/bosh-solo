@@ -6,7 +6,7 @@ BOSH releases describe a complete running system from the ground up - compiled p
 
 Compilation of packages is only performed once. Compilation errors of packages and template rendering errors in jobs do not affect the running system.
 
-This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system.
+This is a tool to iteratively develop and test a BOSH release in a local or remote VM, without needing to use a running BOSH system. It also allows you to see all the steps - package compilation, template rendering, and monit running jobs - all in the same VM.
 
 ## Overview
 
