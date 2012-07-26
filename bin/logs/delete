@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Deletes all *.log files for jobs and monit
+# WARNING: Probably don't do this whilst processes are running
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+rm $(list_logs)
