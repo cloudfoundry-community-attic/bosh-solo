@@ -4,6 +4,11 @@ template install "Vagrantfile" \
   to "Vagrantfile" \
   mode 0644
 
+template install "vagrant-setup.sh" \
+  to "scripts/vagrant-setup.sh" \
+  mode 0755
+
+
 typeset green="\033[32m"
 typeset reset="\033[0m"
 log "
