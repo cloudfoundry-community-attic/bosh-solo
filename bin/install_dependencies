@@ -14,9 +14,11 @@ apt-get install -y --force-yes build-essential flex bison upstart runit patch g+
   libxslt-dev libpq-dev git-core libsqlite3-dev vim curl unzip libreadline5-dev
 
 curl -L https://get.rvm.io | bash -s stable
-/usr/local/rvm/bin/rvm install 1.9.3
-/usr/local/rvm/bin/rvm use 1.9.3 --default
-source $(/usr/local/rvm/bin/rvm 1.9.3 do rvm env --path)
+
+export PATH=$PATH:/usr/local/rvm/bin
+rvm install 1.9.3
+rvm alias create default 1.9.3
+source /usr/local/rvm/environments/default
 
 if [[ ! -d /home/vcap ]]
 then
