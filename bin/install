@@ -2,7 +2,7 @@
 
 set -e # exit immediately if a simple command exits with a non-zero status
 
-[ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
+[[ "$(whoami)" != 'root' ]] && { echo ERROR: run as root user; exit 1 }
 
 
 typeset base_dir=/var/vcap

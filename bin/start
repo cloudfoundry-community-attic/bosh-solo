@@ -3,7 +3,7 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-[ "$(whoami)" != 'root' ] && ( echo ERROR: run as root user; exit 1 )
+[[ "$(whoami)" != 'root' ]] && { echo ERROR: run as root user; exit 1 }
 
 typeset base_dir=/var/vcap
 typeset jobs_dir=${base_dir}/data/jobs
