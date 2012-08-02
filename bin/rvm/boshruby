@@ -13,4 +13,4 @@ typeset ruby_dir=${extension_args[2]:-/var/vcap/packages/ruby}
 
 rvm gemset globalcache enable
 rvm mount -n ${rvm_name} $(readlink ${ruby_dir})
-rvm use ${rvm_name}
+rvm use ext-${rvm_name}
