@@ -2,6 +2,10 @@
 
 Develop, test and deploy BOSH releases without BOSH. Develop an entire working system quickly before you deploy to production.
 
+<blockquote>Just wanted to share a small personal achievement, last night I was able to take a release I had created (actually, the redis-on-demand from your tutorial) and bring it up using bosh-solo, connect to it, set/get, etc.
+<br />
+I've gotta say, this is VERY slick. Awesome work on this. - <em>Brian McClain, creator of <a href="http://boshdb.com" title="BOSHDB">BoshDB</a></em></blockquote>
+
 BOSH releases describe a complete running system from the ground up - compiled packages from source, templated configuration files, and monit to start/stop processes. BOSH itself then allows you to deploy your release across 1 or more VMs with optional persistent disks on the target infrastructure of your choice.
 
 Compilation of packages is only performed once. Compilation errors of packages and template rendering errors in jobs do not affect the running system.
