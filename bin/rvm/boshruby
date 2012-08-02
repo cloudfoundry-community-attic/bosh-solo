@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# If there is a /var/vcap/package/ruby then it adds it into RVM
+# as a mounted ruby `ext-boshruby`
+#
+# Usage:
+# sm bosh-solo rvm boshruby # [defaults to name:boshruby path:/var/vcap/packages/ruby]
+# sm bosh-solo rvm boshruby boshruby # [defaults to path:/var/vcap/packages/ruby]
+# sm bosh-solo rvm boshruby boshruby /var/vcap/packages/ruby19
+
+rvm_name=${extension_args[1]:-boshruby}
+ruby_dir=${extension_args[2]:-/var/vcap/packages/ruby}
+
+rvm gemset globalcache enable
+rvm mount -n ${rvm_name} $(readlink ${ruby_dir})
+rvm ${rvm_name}
