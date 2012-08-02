@@ -265,10 +265,15 @@ In the Vagrant shell, the current ruby is from RVM (1.9.3). If you have installe
 ```
 # [defaults to name:boshruby path:/var/vcap/packages/ruby]
 sm bosh-solo rvm boshruby
+rvm ext-boshruby
+
 # [defaults to name:boshruby]
 sm bosh-solo rvm boshruby /var/vcap/packages/ruby
+rvm ext-boshruby
+
 # Explict path and name
 sm bosh-solo rvm boshruby /var/vcap/packages/ruby19 boshruby19
+rvm ext-boshruby19
 ```
 
 ## Development
