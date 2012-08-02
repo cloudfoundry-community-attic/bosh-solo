@@ -9,6 +9,6 @@ typeset release_path=$(pwd)
 
 for log in $(list_logs)
 do
-  echo emtpying $log...
+  echo emptying $log...
   cat /dev/null > $log
 done
