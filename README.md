@@ -256,6 +256,21 @@ bosh create release
 sm bosh-solo update examples/solo.yml
 ```
 
+## Miscellaneous extras
+
+### Use package Ruby instead of RVM
+
+In the Vagrant shell, the current ruby is from RVM (1.9.3). If you have installed a ruby within your BOSH release you can have the shell switch to it:
+
+```
+# [defaults to name:boshruby path:/var/vcap/packages/ruby]
+sm bosh-solo rvm boshruby
+# [defaults to name:boshruby]
+sm bosh-solo rvm boshruby /var/vcap/packages/ruby
+# Explict path and name
+sm bosh-solo rvm boshruby /var/vcap/packages/ruby19 boshruby19
+```
+
 ## Development
 
 This section described the processes and rules for developing on bosh-solo itself.
