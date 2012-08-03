@@ -21,7 +21,7 @@ if [[ ! -f ${manifest_path} ]]; then
   exit 1
 fi
 
-orig_path=$PATH
+typeset orig_path=$PATH
 rvm system
 
 sm bosh-solo reset_logs
