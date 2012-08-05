@@ -13,6 +13,7 @@ set -u # report the usage of uninitialized variables
 
 typeset release_path=$(pwd)
 typeset base_dir=/var/vcap
+typeset rvm=/usr/local/rvm/bin/rvm
 
 typeset manifest_path=${extension_args[1]:-UNKNOWNFILE}
 if [[ ! -f ${manifest_path} ]]; then
@@ -22,7 +23,7 @@ if [[ ! -f ${manifest_path} ]]; then
 fi
 
 typeset orig_path=$PATH
-rvm system
+${rvm} system
 
 sm bosh-solo reset_logs
 sm bosh-solo stop || true
@@ -30,5 +31,5 @@ sm bosh-solo install
 sm bosh-solo configure ${manifest_path}
 sm bosh-solo start
 
-rvm default
+${rvm} default
 export PATH=${orig_path}
