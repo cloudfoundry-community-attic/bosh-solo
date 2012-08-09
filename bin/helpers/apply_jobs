@@ -138,6 +138,7 @@ jobs.each do |job|
     "deployment" => "deployment",
     "release" => { "version" => release_version },
     "job" => apply_job_spec,
+    "index" => 0,                       # only one VM, all jobs are index 0
     "packages" => packages_spec,       # install all packages for all jobs
     "configuration_hash" => "deadbeef", # TODO what's this for?
     "properties" => deployment_properties
