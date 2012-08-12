@@ -29,8 +29,8 @@ else
   exit 1
 fi
 
-# remove symlinks
-rm /var/vcap/jobs/*
+# remove symlinks or unpacked micro directories
+rm -rf /var/vcap/jobs/*
 
 typeset release_tgz=$(sm bosh-solo helpers/create_release_tgz ${release_path})
 sm bosh-solo helpers/apply_jobs ${release_tgz} ${manifest_template}
