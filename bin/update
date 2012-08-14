@@ -22,14 +22,8 @@ if [[ ! -f ${manifest_path} ]]; then
   exit 1
 fi
 
-typeset orig_path=$PATH
-${rvm} system
-
 sm bosh-solo reset_logs
 sm bosh-solo stop || true
 sm bosh-solo install
 sm bosh-solo configure ${manifest_path}
 sm bosh-solo start
-
-${rvm} default
-export PATH=${orig_path}
