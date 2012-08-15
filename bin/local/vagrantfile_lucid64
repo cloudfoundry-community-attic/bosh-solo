@@ -4,7 +4,7 @@ template install "Vagrantfile-lucid64" \
   to "Vagrantfile" \
   mode 0644
 
-template install "vagrant-setup-lucid64.sh" \
+template install "vagrant-setup.sh" \
   to "scripts/vagrant-setup.sh" \
   mode 0755
 
