@@ -30,6 +30,8 @@ then
   sudo /opt/sm/bin/sm bosh-solo install_dependencies
 
   touch ~/install_dependencies_complete
+else
+  sudo /opt/sm/bin/sm ext update bosh-solo
 fi
 
 # TODO run: sm bosh-solo update examples/dev-solo.yml or rel.yml
