@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-template install "vagrant/prepackaged/Vagrantfile" \
+template install "Vagrantfile-prepackaged" \
   to "Vagrantfile" \
   mode 0644
 
-template install "vagrant/prepackaged/vagrant-setup.sh" \
+template install "vagrant-setup-prepackaged.sh" \
   to "scripts/vagrant-setup.sh" \
   mode 0755
 
