@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+template install "Vagrantfile-precise64" \
+  to "Vagrantfile" \
+  mode 0644
+
+template install "vagrant-setup.sh" \
+  to "scripts/vagrant-setup.sh" \
+  mode 0755
+
+
+typeset green="\033[32m"
+typeset reset="\033[0m"
+log "
+  ${green}create${reset}  Vagrantfile
+  ${green}create${reset}  scripts/vagrant-setup.sh
+Now run the following to launch Vagrant:
+ gem install vagrant
+ vagrant up
+ vagrant ssh
+"
