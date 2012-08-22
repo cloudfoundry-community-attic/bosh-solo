@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-template install "Vagrantfile-lucid64" \
+template install "Vagrantfile-precise64" \
   to "Vagrantfile" \
   mode 0644
 
