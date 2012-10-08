@@ -24,8 +24,8 @@ fi
 cd ${bosh_install_path}
 rake bundle_install
 
-# need to install bosh_common gem
-for package in common director cli simple_blobstore_server agent health_monitor
+# need to install some package gems
+for package in common cli
 do
   cd ${bosh_install_path}/${package}
   bundle install --local --without development production
