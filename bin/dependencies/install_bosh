@@ -5,8 +5,10 @@ set -u # report the usage of uninitialized variables
 
 typeset bosh_install_path=${extension_args[1]:-/bosh}
 
-# includes patches
-# - http://reviews.cloudfoundry.org/#/c/7126/
+# Based off bosh sha 73148848e0c116e09cc1561cbd47167b06e582c8
+# which includes bosh_cli 1.0.rc1
+# plus patches:
+# - http://reviews.cloudfoundry.org/#/c/10153/ - Templates can access raw_properties (no openstruct wrapper)
 
 if [[ -d ${bosh_install_path} ]]
 then
