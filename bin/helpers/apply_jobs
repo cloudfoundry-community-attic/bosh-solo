@@ -17,14 +17,20 @@ manifest_path    = ARGV.shift
 logging_level = (ENV['LOG_LEVEL'] || 'WARN').upcase
 base_dir      = ENV['BASE_DIR'] || '/var/vcap'
 
-def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; exit 1; end
-def error_usage; $stderr.puts "USAGE: apply_jobs RELEASE_TGZ MANIFEST_PATH"; end
+def error_usage
+  $stderr.puts "USAGE: apply_jobs RELEASE_TGZ MANIFEST_PATH"
+  exit 1
+end
+def error(*msgs); msgs.each {|msg| $stderr.puts msg}; error_usage; end
 def error_path_invalid(field); error "ERROR: Path #{field} does not exist"; end
 def error_yaml_format_required(error); error "Invalid YAML format for #{manifest_path}", error; end
-def error_manifest_jobs_format; error "Manifest 'job' is an array of job names"; end
+def error_manifest_jobs_format
+  error "Manifest 'job' is an array of job names or " +
+        "hash of [name, template] keys"
+end
 
-error_usage unless manifest_path
-error_path_invalid('RELEASE_TGZ') unless File.exist?(release_tgz)
+error_usage unless release_tgz && manifest_path
+error_path_invalid('RELEASE_TGZ') unless  File.exist?(release_tgz)
 error_path_invalid('MANIFEST_PATH') unless File.exist?(manifest_path)
 
 require "yaml"
@@ -47,14 +53,37 @@ end
 
 # See examples/ folder for example manifest_path files
 # Top level keys of manifest_path file are:
-# - jobs: restricted list of job names to install (optional; defaults to all)
 # - properties: example job template properties
 deployment_properties = deployment_manifest["properties"]
+
+# - jobs: restricted list of job names to install 
+#   Two schemas supported: name-only & deployment manifest
+#   jobs:
+#   - job1
+#   - job2
+#
+#   jobs:
+#   - name: job1
+#     template: job1
+#   - name: job2
+#     template: job2
 requested_jobs = deployment_manifest["jobs"]
 
 # optional to specify list of jobs; else install all
 if requested_jobs
-  error_manifest_jobs_format unless requested_jobs.is_a?(Array) && requested_jobs.first.is_a?(String)
+  # if the first scenario above, then
+  # convert to 2nd scenario schema
+  if requested_jobs.first.is_a?(String)
+    requested_jobs = requested_jobs.map do |name|
+      { "name" => name, "template" => name }
+    end
+  end
+
+  unless requested_jobs.is_a?(Array) && 
+      requested_jobs.first.is_a?(Hash) &&
+      requested_jobs.first["name"].is_a?(String)
+    error_manifest_jobs_format
+  end
 end
 
 latest_dev_release_path = `ls -t dev_releases/*-dev.yml`.lines.first.strip
