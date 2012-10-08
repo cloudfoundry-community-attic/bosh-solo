@@ -40,14 +40,10 @@ manifest_path      = local_manifest_path(host_manifest_path, work_dir)
 release_tgz_path = manifest_path.gsub(/yml$/, 'tgz')
 
 unless File.exists?(release_tgz_path)
-  manifest           = YAML.load_file(manifest_path)
-  remote_release     = nil
   package_matches    = []
   blobstore          = release.blobstore
 
-  compiler =
-    Bosh::Cli::ReleaseCompiler.new(manifest_path, blobstore,
-                                   remote_release, package_matches)
+  compiler = Bosh::Cli::ReleaseCompiler.new(manifest_path, blobstore, package_matches)
   unless compiler.exists?
     compiler.tarball_path = release_tgz_path
     compiler.compile
