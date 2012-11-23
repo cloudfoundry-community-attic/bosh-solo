@@ -72,6 +72,7 @@ if requested_jobs
       puts "Unknown job: #{req}"
       exit
     end
+    job
   end
 else
   jobs = available_jobs.clone
