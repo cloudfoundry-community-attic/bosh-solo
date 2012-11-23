@@ -162,9 +162,14 @@ jobs.each do |job|
   Bosh::Agent::Config.base_dir = base_dir
 
   # setup taken from apply_spec.rb in bosh/agent
-  Bosh::Agent::Config.setup({"logging" => { "file" => STDOUT, "level" => logging_level }, "mbus" => nil, "blobstore_options" => {}})
-  Bosh::Agent::Config.blobstore_provider = "simple"
-  Bosh::Agent::Config.platform_name = "dummy" # or microcloud?
+  Bosh::Agent::Config.setup({
+    "logging" => { "file" => STDOUT, "level" => logging_level },
+    "mbus" => nil,
+    "blobstore_options" => {},
+    "blobstore_provider" => "simple",
+    "infrastructure_name" => "dummy",
+    "platform_name" => "dummy"
+  })
 
   FileUtils.mkdir_p(File.join(base_dir, 'monit'))
   Bosh::Agent::Monit.setup_monit_user
