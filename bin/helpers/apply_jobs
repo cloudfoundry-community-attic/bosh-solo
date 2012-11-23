@@ -134,13 +134,28 @@ jobs.each do |job|
     "blobstore_id" => "job_app_blobstore" # matches stub_request below
   })
   
+  # the deployment plan spec
+  # https://github.com/cloudfoundry/bosh/blob/master/director/lib/director/deployment_plan/instance.rb#L341-L365
   apply_spec = {
     "deployment" => "deployment",
     "release" => { "version" => release_version },
     "job" => apply_job_spec,
     "index" => 0,                       # only one VM, all jobs are index 0
-    "packages" => packages_spec,       # install all packages for all jobs
-    "configuration_hash" => "deadbeef", # TODO what's this for?
+    "networks" => {                     # two different useful network names
+      "default" => {
+        "name" => "default",
+        "default" => ["dns", "gateway"],
+        "ip" => "127.0.0.1"
+      },
+      "local" => {
+        "name" => "local",
+        "default" => ["dns", "gateway"],
+        "ip" => "127.0.0.1"
+      }
+    },
+    "resource_pool" => {},
+    "packages" => packages_spec,        # install all packages for all jobs
+    "configuration_hash" => "deadbeef", # determines if this is new configuration
     "properties" => deployment_properties
   }
 
@@ -149,7 +164,7 @@ jobs.each do |job|
   # setup taken from apply_spec.rb in bosh/agent
   Bosh::Agent::Config.setup({"logging" => { "file" => STDOUT, "level" => logging_level }, "mbus" => nil, "blobstore_options" => {}})
   Bosh::Agent::Config.blobstore_provider = "simple"
-  Bosh::Agent::Config.platform_name = "dummy"
+  Bosh::Agent::Config.platform_name = "dummy" # or microcloud?
 
   FileUtils.mkdir_p(File.join(base_dir, 'monit'))
   Bosh::Agent::Monit.setup_monit_user
