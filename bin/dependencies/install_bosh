@@ -14,14 +14,12 @@ then
 else
   echo "Cloning..."
   mkdir -p $(dirname ${bosh_install_path})
-  git clone git://github.com/cloudfoundry/bosh.git
+  # git clone git://github.com/cloudfoundry/bosh.git
 
-  # For future reference, if patches needed:
-  # Based off bosh sha 73148848e0c116e09cc1561cbd47167b06e582c8
-  # which includes bosh_cli 1.0.rc1
+  # Based off bosh sha 3fa57a954ea05662c9acfdd0018d32a201261b3c
   # plus patches:
-  # - http://reviews.cloudfoundry.org/#/c/10153/ - Templates can access raw_properties (no openstruct wrapper)
-  # git clone git://github.com/drnic/bosh.git ${bosh_install_path} -b bosh-solo-patches
+  # - http://reviews.cloudfoundry.org/11670 - Infrastructure#get_network_settings for "dummy"
+  git clone git://github.com/drnic/bosh.git ${bosh_install_path} -b dummy_network_settings
 fi
 
 cd ${bosh_install_path}
