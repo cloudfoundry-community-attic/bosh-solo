@@ -262,6 +262,18 @@ sm bosh-solo update examples/solo.yml
 
 ## Miscellaneous extras
 
+## Upgrade existing bosh-solo VM
+
+Instead of upgrading to newer bosh-solo vagrant boxes, you can upgrade an existing bosh:
+
+```
+sudo su -
+sm ext install bosh-solo git://github.com/drnic/bosh-solo.git
+rm -rf /bosh
+sm bosh-solo install_dependencies
+cd /vagrant
+```
+
 ### Use package Ruby instead of RVM
 
 In the Vagrant shell, the current ruby is from RVM (1.9.3). If you have installed a ruby within your BOSH release you can have the shell switch to it:
