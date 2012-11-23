@@ -66,7 +66,13 @@ release_version = latest_dev_release["version"]
 # optional to specify list of jobs; else install all
 available_jobs = latest_dev_release["jobs"]
 if requested_jobs
-  jobs = available_jobs.select { |job| requested_jobs.include? job["name"] }
+  # install jobs in the order specified
+  jobs = requested_jobs.map do |req|
+    unless job = available_jobs.find { |job| job["name"] == req }
+      puts "Unknown job: #{req}"
+      exit
+    end
+  end
 else
   jobs = available_jobs.clone
 end
