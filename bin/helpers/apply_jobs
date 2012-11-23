@@ -141,18 +141,19 @@ jobs.each do |job|
     "release" => { "version" => release_version },
     "job" => apply_job_spec,
     "index" => 0,                       # only one VM, all jobs are index 0
-    "networks" => {                     # two different useful network names
-      "default" => {
-        "name" => "default",
-        "default" => ["dns", "gateway"],
-        "ip" => "127.0.0.1"
-      },
-      "local" => {
-        "name" => "local",
-        "default" => ["dns", "gateway"],
-        "ip" => "127.0.0.1"
-      }
-    },
+    # networks aren't appropriate for dummy infrastructure
+    # "networks" => {                     # two different useful network names
+    #   "default" => {
+    #     "name" => "default",
+    #     "default" => ["dns", "gateway"],
+    #     "ip" => "127.0.0.1"
+    #   },
+    #   "local" => {
+    #     "name" => "local",
+    #     "default" => ["dns", "gateway"],
+    #     "ip" => "127.0.0.1"
+    #   }
+    # },
     "resource_pool" => {},
     "packages" => packages_spec,        # install all packages for all jobs
     "configuration_hash" => "deadbeef", # determines if this is new configuration
