@@ -1,7 +1,7 @@
 Vagrant::Config.run do |config|
-  config.vm.box = "bosh-solo-0.6.4"
+  config.vm.box = "bosh-solo-0.6.7"
   downloads = "https://github.com/downloads/drnic/bosh-solo/"
-  config.vm.box_url = "#{downloads}bosh-solo-0.6.4.box"
+  config.vm.box_url = "#{downloads}bosh-solo-0.6.7.box"
 
   # config.vm.forward_port 80, 5001
   # config.vm.network :hostonly, "33.33.33.30"
