@@ -12,5 +12,5 @@ typeset release_path=$(pwd)
 
 sm bosh-solo helpers/start_monit
 
-echo "sm bosh-solo tail_logs -f      # tail all logs"
-echo "sm bosh-solo tail_logs -n 200  # show all logs"
+echo "sm bosh-solo tail_logs -f -n 200  # tail all logs"
+echo "monit start all                   # restart monit"
