@@ -11,6 +11,11 @@
 # - jobs: restricted list of job names to install (optional; defaults to all)
 # - properties: example job template properties
 
+# To test modifications to this script inside a Vagrant VM, use:
+#   vim /opt/sm/exts/active/bosh-solo/bin/helpers/apply_jobs
+#   <deleted everything and paste in this file>
+#   ruby -c /opt/sm/exts/active/bosh-solo/bin/helpers/apply_jobs
+
 release_tgz      = ARGV.shift
 manifest_path    = ARGV.shift
 
@@ -29,6 +34,7 @@ error_path_invalid('MANIFEST_PATH') unless File.exist?(manifest_path)
 
 require "yaml"
 require "erb"
+require "pp"
 
 ENV["BUNDLE_GEMFILE"] = "/bosh/agent/Gemfile"
 require "rubygems"
@@ -78,6 +84,12 @@ else
   jobs = available_jobs.clone
 end
 
+# jobs look like:
+# - name: acm
+#   version: 2
+#   fingerprint: 88b4ae43cb43183fa926cec701ed8845fff040ef
+#   sha1: b63f9fb689c5782f4f21bbca0b23c9c9c4c340d1
+
 # Create spec of all packages to be installed by all jobs
 #
 # In normal bosh, a job would depend on a subset of packages
@@ -120,7 +132,7 @@ Dir["/var/vcap/monit/job/*"].each do |f|
 end
 
 saved_symlinks = {}
-jobs.each do |job|
+apply_job_specs = jobs.map do |job|
   puts "Applying job #{job.inspect}"
   # if $package_version contains a decimal point, then its a dev build (.dev_builds),
   # else a finalized package
@@ -128,73 +140,82 @@ jobs.each do |job|
   build_folder = job_version =~ /dev/ ? '.dev_builds' : '.final_builds'
   job_tgz = "#{build_folder}/jobs/#{job['name']}/#{job['version']}.tgz"
   job_sha1 = Digest::SHA1.file(job_tgz).hexdigest
-  
-  # +job+ contains:
-  # - name: app
+
+  # jobs initially look like:
+  # - name: acm
   #   version: 0.2-dev or 1
-  #   sha1: b53fb0cb1bea8a13e4a51b273c17371a16d3918d
+  #   fingerprint: 88b4ae43cb43183fa926cec701ed8845fff040ef
+  #   sha1: b63f9fb689c5782f4f21bbca0b23c9c9c4c340d1
+
+  blobstore_id = "blobstore_for_#{job['name']}"
+  stub_request(:get, "http://resources/#{blobstore_id}?").to_return(:body => File.read(job_tgz))
   
   # required for spec: name template version sha1 blobstore_id
   apply_job_spec = job.merge({
-    "template" => job["name"],
-    "version" => job_version,             # ensure its a string
-    "blobstore_id" => "job_app_blobstore" # matches stub_request below
+    "name" => job["name"],
+    "version" => job["version"].to_s,
+    "blobstore_id" => blobstore_id # matches stub_request below
   })
-  
-  # the deployment plan spec
-  # https://github.com/cloudfoundry/bosh/blob/master/director/lib/director/deployment_plan/instance.rb#L341-L365
-  apply_spec = {
-    "deployment" => "deployment",
-    "release" => { "version" => release_version },
-    "job" => apply_job_spec,
-    "index" => 0,                       # only one VM, all jobs are index 0
-    "networks" => {                     # two different useful network names
-      "default" => {
-        "name" => "default",
-        "default" => ["dns", "gateway"],
-        "ip" => "127.0.0.1"
-      },
-      "local" => {
-        "name" => "local",
-        "default" => ["dns", "gateway"],
-        "ip" => "127.0.0.1"
-      }
+  apply_job_spec
+end
+
+job_specs = {
+  "name" => "bosh-solo",
+  "templates" => apply_job_specs
+}
+
+# the deployment plan spec
+# https://github.com/cloudfoundry/bosh/blob/master/director/lib/director/deployment_plan/instance.rb#L341-L365
+apply_spec = {
+  "deployment" => "deployment",
+  "release" => { "version" => release_version },
+  "job" => job_specs,
+  "index" => 0,                       # only one VM, all jobs are index 0
+  "networks" => {                     # two different useful network names
+    "default" => {
+      "name" => "default",
+      "default" => ["dns", "gateway"],
+      "ip" => "127.0.0.1"
     },
-    "resource_pool" => {},
-    "packages" => packages_spec,        # install all packages for all jobs
-    "configuration_hash" => "deadbeef", # determines if this is new configuration
-    "properties" => deployment_properties
-  }
+    "local" => {
+      "name" => "local",
+      "default" => ["dns", "gateway"],
+      "ip" => "127.0.0.1"
+    }
+  },
+  "resource_pool" => {},
+  "packages" => packages_spec,        # install all packages for all jobs
+  "configuration_hash" => "deadbeef", # determines if this is new configuration
+  "properties" => deployment_properties
+}
 
-  Bosh::Agent::Config.base_dir = base_dir
+pp apply_spec
 
-  # setup taken from apply_spec.rb in bosh/agent
-  Bosh::Agent::Config.setup({
-    "logging" => { "file" => STDOUT, "level" => logging_level },
-    "mbus" => nil,
-    "blobstore_options" => {},
-    "blobstore_provider" => "simple",
-    "infrastructure_name" => "dummy",
-    "platform_name" => "dummy"
-  })
+Bosh::Agent::Config.base_dir = base_dir
 
-  FileUtils.mkdir_p(File.join(base_dir, 'monit'))
-  Bosh::Agent::Monit.setup_monit_user
+# setup taken from apply_spec.rb in bosh/agent
+Bosh::Agent::Config.setup({
+  "logging" => { "file" => STDOUT, "level" => logging_level },
+  "mbus" => nil,
+  "blobstore_options" => {},
+  "blobstore_provider" => "simple",
+  "infrastructure_name" => "dummy",
+  "platform_name" => "dummy"
+})
 
-  stub_request(:get, "http://resources/job_app_blobstore?").to_return(:body => File.read(job_tgz))
+FileUtils.mkdir_p(File.join(base_dir, 'monit'))
+Bosh::Agent::Monit.setup_monit_user
 
-  Bosh::Agent::Message::Apply.process([apply_spec])
-  
-  # Need to rescue all job/*.monitrc files (and their symlinks)
-  # as next Apply.process will destroy them.
-  # Rescue them by deleting the /var/vcap/monit/jobs/*.monitrc symlink
-  # and restore it below
-  Dir["/var/vcap/monit/job/*"].each do |f|
-    saved_symlinks[f.to_s] = File.readlink(f)
-    FileUtils.rm_rf(f)
-  end
+puts "Agent applying spec..."
+Bosh::Agent::Message::Apply.process([apply_spec])
 
-  # TODO Use colocation (multiple job-templates with one wrapper deployment-job)
+# Need to rescue all job/*.monitrc files (and their symlinks)
+# as next Apply.process will destroy them.
+# Rescue them by deleting the /var/vcap/monit/jobs/*.monitrc symlink
+# and restore it below
+Dir["/var/vcap/monit/job/*"].each do |f|
+  saved_symlinks[f.to_s] = File.readlink(f)
+  FileUtils.rm_rf(f)
 end
 
 # Restore all job/*.monitrc files and recreate symlinks
