@@ -1,3 +1,8 @@
+
+# Notice
+
+***bosh-solo has been deprecated in favor of [bosh-lite](https://github.com/cloudfoundry/bosh-lite) or [nise](https://github.com/nttlabs/nise_bosh).***
+
 # bosh-solo
 
 Develop, test and deploy BOSH releases without BOSH. Develop an entire working system quickly before you deploy to production.
